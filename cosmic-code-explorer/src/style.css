@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Make sure you are NOT doing this:
+ * @import './tailwind.config.js';  <-- REMOVE THIS LINE IF IT EXISTS
+ */
+
+/* You can add other custom CSS below the directives if needed */
+body {
+    /* This is a good place for the background style from the HTML */
+    background-color: #100F3A;
+    background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+}
+
+/* Transition classes for intro screen fade out */
+.opacity-0 {
+    opacity: 0;
+}
+
+.pointer-events-none {
+    pointer-events: none;
+}
+
+#intro-screen {
+    transition: opacity 0.5s ease-in-out;
+}
