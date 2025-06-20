@@ -14,7 +14,6 @@
     
     <style>
         body {
-            /* You can replace this with a high-quality starfield image */
             background-color: #100F3A;
             background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
         }
@@ -22,45 +21,44 @@
 </head>
 <body class="font-sans">
 
-    <div id="app" class="min-h-screen flex flex-col items-center justify-center text-center text-white p-4">
-        <div id="intro-screen">
+    <div id="app" class="min-h-screen flex flex-col items-center justify-center text-center text-white py-12 px-4">
+        
+        <div id="intro-screen" class="flex flex-col items-center gap-6">
 
-        <div class="title-container mb-4">
-            <h2 class="text-4xl font-bold tracking-widest">THE</h2>
-            <h1 class="text-7xl md:text-8xl font-black -mt-2">COSMIC CREW</h1>
-        </div>
-
-        <p class="text-2xl text-brand-aqua mb-8 font-medium">
-            Explore the galaxy and meet your coding crew!
-        </p>
-
-        <div class="rocket-container my-8">
-            <img id="launch-button" src="/assets/rocket.png" alt="Cartoon Rocket" class="w-96 h-auto cursor-pointer hover:scale-105 transition-transform">
-        </div>
-
-        <div class="character-select flex flex-col md:flex-row items-center justify-center gap-12 md:gap-8 mt-8">
-            
-            <div class="character-avatar">
-                <img class="w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer hover:scale-110 transition-transform" 
-                src="/assets/characters/debug-kid.png" alt="Debug Kid" data-character="debug-kid">
-            </div>
-            
-            <div class="character-avatar">
-                <img class="w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer hover:scale-110 transition-transform" 
-                     src="/assets/characters/loop-kid.png" alt="Loop Kid" data-character="loop-kid">
-            </div>
-            
-            <div class="character-avatar">
-                <img class="w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer hover:scale-110 transition-transform" 
-                src="/assets/characters/ifthen-kid.png" alt="If-Then Kid" data-character="ifthen-kid">
+            <div class="title-container">
+                <h2 class="text-4xl font-bold tracking-widest">THE</h2>
+                <h1 class="text-7xl md:text-8xl font-black -mt-2">COSMIC CREW</h1>
             </div>
 
-        </div>
+            <p class="text-2xl text-brand-aqua font-medium">
+                Explore the galaxy and meet your coding crew!
+            </p>
+
+            <div class="rocket-container flex justify-center">
+                <img id="launch-button" alt="Cartoon Rocket" class="w-64 md:w-96 h-auto cursor-pointer hover:scale-105 transition-transform">
+            </div>
+
+            <div class="character-select flex flex-col md:flex-row items-center justify-center gap-12 md:gap-8">
+                
+                <div class="character-avatar">
+                    <img id="debug-kid-img" class="w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer hover:scale-110 transition-transform" 
+                         alt="Debug Kid" data-character="debug-kid">
+                </div>
+                
+                <div class="character-avatar">
+                    <img id="loop-kid-img" class="w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer hover:scale-110 transition-transform" 
+                         alt="Loop Kid" data-character="loop-kid">
+                </div>
+                
+                <div class="character-avatar">
+                    <img id="ifthen-kid-img" class="w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer hover:scale-110 transition-transform" 
+                         alt="If-Then Kid" data-character="ifthen-kid">
+                </div>
+
+            </div>
 
         </div>
     </div>
-
-    <div id="game-canvas-container" style="display: none;"></div>
 
     <script type="module" src="/src/main.js"></script>
 </body>

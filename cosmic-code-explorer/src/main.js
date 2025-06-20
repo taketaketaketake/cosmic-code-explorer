@@ -1,42 +1,29 @@
 import './style.css';
-import * as PIXI from 'pixi.js';
-import { GameCanvas } from './scenes/GameCanvas.js';
 import { IntroScreen } from './scenes/IntroScreen.js';
 
-class App {
-    constructor() {
-        this.gameContainer = document.querySelector('#game-canvas-container');
-        // Pass the asyncstartGame method to the intro screen
-        this.intro = new IntroScreen(this.startGame.bind(this));
-    }
+// Import assets so Vite can process them
+import rocketImg from './assets/rocket.png';
+import debugKidImg from './assets/characters/debug-kid.png';
+import loopKidImg from './assets/characters/loop-kid.png';
+import ifthenKidImg from './assets/characters/ifthen-kid.png';
 
-    async startGame(selectedCharacter) {
-        try {
-            console.log('Starting game with character:', selectedCharacter);
-            this.intro.hide();
-
-            // Show the game container
-            this.gameContainer.style.display = 'block';
-
-            this.pixiApp = new PIXI.Application();
-            await this.pixiApp.init({
-                width: window.innerWidth,
-                height: window.innerHeight,
-                backgroundColor: 0x0c0c1f,
-                resizeTo: window,
-            });
-            
-            console.log('PIXI app initialized, canvas:', this.pixiApp.canvas);
-            this.gameContainer.appendChild(this.pixiApp.canvas);
-
-            // Pass the selected character to GameCanvas
-            this.gameScene = new GameCanvas(this.pixiApp, selectedCharacter);
-            await this.gameScene.start();
-            console.log('Game scene started successfully');
-        } catch (error) {
-            console.error('Error starting game:', error);
-        }
-    }
+/**
+ * The main entry point for the application.
+ * This function waits for the HTML document to be fully loaded
+ * before trying to manipulate any elements.
+ */
+function main() {
+    // Set the image sources now that we know the elements exist
+    document.getElementById('launch-button').src = rocketImg;
+    document.getElementById('debug-kid-img').src = debugKidImg;
+    document.getElementById('loop-kid-img').src = loopKidImg;
+    document.getElementById('ifthen-kid-img').src = ifthenKidImg;
+    
+    // Now that images are set, initialize the intro screen logic
+    // which adds the click listeners.
+    new IntroScreen();
 }
 
-window.onload = () => new App();
+// This is the crucial part: it waits for the HTML to be ready
+// before running our main function.
+document.addEventListener('DOMContentLoaded', main);
