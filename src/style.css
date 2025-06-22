@@ -1,0 +1,54 @@
+/* --- Tailwind Directives (MUST BE AT THE TOP) --- */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- Body and Global Styles --- */
+body {
+    background-color: #100F3A;
+    background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+}
+
+/* --- Character Selection Styles --- */
+.character-select img {
+    transition: all 0.3s ease-in-out;
+    border-radius: 9999px;
+    box-shadow: 0 0 0 0px rgba(42, 245, 255, 0);
+}
+
+.character-select img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(42, 245, 255, 0.8);
+}
+
+.character-select img.selected {
+    border: 4px solid #2AF5FF;
+    box-shadow: 0 0 20px #2AF5FF;
+}
+
+/* --- Style to position the rocket image itself --- */
+#launch-button {
+    position: relative;
+    z-index: 10; /* Ensures the rocket is always on top */
+}
+
+/* --- Rocket Flame Animation Container --- */
+.flame-animation-container {
+    background: linear-gradient(to bottom, rgba(255, 255, 100, 0.8) 0%, rgba(255, 150, 0, 0.6) 50%, rgba(255, 50, 0, 0.4) 100%);
+    border-radius: 50% 50% 30% 30% / 60% 60% 40% 40%;
+    filter: blur(3px);
+    opacity: 0.8;
+    animation: pulse 1.5s ease-in-out infinite alternate;
+    z-index: 0; /* Ensure it's behind the rocket */
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, 0%) scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -10%) scale(1.1);
+        opacity: 0.95;
+    }
+}

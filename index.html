@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Cosmic Crew</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <link href="/src/style.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #100F3A;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+        }
+    </style>
+</head>
+<body class="font-sans">
+
+    <div id="app" class="min-h-screen flex flex-col items-center justify-center text-center text-white py-12 px-4">
+        
+        <div id="intro-screen" class="flex flex-col items-center gap-6">
+
+            <div class="title-container">
+                <h2 class="text-4xl font-bold tracking-widest">THE</h2>
+                <h1 class="text-7xl md:text-8xl font-black -mt-2">COSMIC CREW</h1>
+            </div>
+
+            <p class="text-2xl text-brand-aqua font-medium">
+                Explore the galaxy and meet your coding crew!
+            </p>
+
+            <div class="rocket-container flex justify-center">
+                <img id="launch-button" alt="Cartoon Rocket" class="w-64 md:w-96 h-auto cursor-pointer hover:scale-105 transition-transform">
+            </div>
+
+            <div class="character-select flex flex-col md:flex-row items-center justify-center gap-12 md:gap-8">
+                
+                <div class="character-avatar">
+                    <img id="debug-kid-img" class="w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer hover:scale-110 transition-transform" 
+                         alt="Debug Kid" data-character="debug-kid">
+                </div>
+                
+                <div class="character-avatar">
+                    <img id="loop-kid-img" class="w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer hover:scale-110 transition-transform" 
+                         alt="Loop Kid" data-character="loop-kid">
+                </div>
+                
+                <div class="character-avatar">
+                    <img id="ifthen-kid-img" class="w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer hover:scale-110 transition-transform" 
+                         alt="If-Then Kid" data-character="ifthen-kid">
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
