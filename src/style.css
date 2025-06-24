@@ -19,11 +19,13 @@ body {
 .character-select img:hover {
     transform: scale(1.1);
     box-shadow: 0 0 20px rgba(42, 245, 255, 0.8);
+    animation: wobble 0.5s ease-in-out;
 }
 
-.character-select img.selected {
+.character-select img[data-selected="true"] {
     border: 4px solid #2AF5FF;
-    box-shadow: 0 0 20px #2AF5FF;
+    animation: bounce-in 0.4s ease, pulse-glow 2s infinite ease-in-out;
+    transform: scale(1.1); /* Also make it slightly bigger */
 }
 
 /* --- Style to position the rocket image itself --- */
@@ -42,13 +44,22 @@ body {
     z-index: 0; /* Ensure it's behind the rocket */
 }
 
-@keyframes pulse {
+@keyframes wobble {
+    0% { transform: rotate(0deg) scale(1.1); }
+    25% { transform: rotate(5deg) scale(1.1); }
+    50% { transform: rotate(-5deg) scale(1.1); }
+    75% { transform: rotate(5deg) scale(1.1); }
+    100% { transform: rotate(0deg) scale(1.1); }
+  }
+
+  @keyframes bounce-in {
     0% {
-        transform: translate(-50%, 0%) scale(1);
-        opacity: 0.8;
+      transform: scale(1.0);
+    }
+    50% {
+      transform: scale(1.25);
     }
     100% {
-        transform: translate(-50%, -10%) scale(1.1);
-        opacity: 0.95;
+      transform: scale(1.1);
     }
-}
+  }

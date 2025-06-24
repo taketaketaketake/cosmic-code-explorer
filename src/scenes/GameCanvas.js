@@ -16,10 +16,15 @@ export class GameCanvas {
         this.thrust = 0.08;
         this.drag = 0.985;
         this.maxSpeed = 8;
+        this.rotationSpeed = 0.05;
         
         // Keyboard control properties
         this.bankAngle = 0.25; 
         this.keys = {};
+
+        // Character properties
+        this.characters = []; 
+        this.characterDrag = 0.96; 
 
         // Particle trail properties
         this.particles = [];
@@ -94,7 +99,7 @@ export class GameCanvas {
         this.rocket.anchor.set(0.5);
         this.rocket.x = 0;
         this.rocket.y = 0;
-        this.rocket.scale.set(0.4); // Adjusted scale
+        this.rocket.scale.set(0.4);
         this.world.addChild(this.rocket);
     }
 
@@ -111,8 +116,12 @@ export class GameCanvas {
             character.anchor.set(0.5);
             character.x = data.x;
             character.y = data.y;
-            character.scale.set(0.25); // Adjusted scale
+            character.scale.set(0.25);
+            character.velocity = { x: 0, y: 0 };
+            character.rotationSpeed = 0;
+            
             this.world.addChild(character);
+            this.characters.push(character);
         });
     }
 
@@ -144,12 +153,40 @@ export class GameCanvas {
         this.particles.push(particle);
     }
 
+    checkCollisions() {
+        const radiusScaleFactor = 0.7;
+
+        for (const character of this.characters) {
+            const rocketRadius = (this.rocket.width / 2) * radiusScaleFactor;
+            const characterRadius = (character.width / 2) * radiusScaleFactor;
+            const collisionDistance = rocketRadius + characterRadius;
+            
+            const dx = character.x - this.rocket.x;
+            const dy = character.y - this.rocket.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < collisionDistance) {
+                const overlap = collisionDistance - distance;
+                const normalX = distance > 0 ? dx / distance : 1; 
+                const normalY = distance > 0 ? dy / distance : 0;
+                
+                character.x += normalX * overlap;
+                character.y += normalY * overlap;
+                
+                const rocketSpeed = Math.sqrt(this.velocity.x**2 + this.velocity.y**2);
+                const bounceForce = 2 + rocketSpeed * 0.7;
+                character.velocity.x = normalX * bounceForce;
+                character.velocity.y = normalY * bounceForce;
+
+                character.rotationSpeed = (Math.random() - 0.5) * 0.2;
+            }
+        }
+    }
+
     bindControls() {
-        // Keyboard controls
         window.addEventListener('keydown', e => (this.keys[e.key] = true));
         window.addEventListener('keyup', e => (this.keys[e.key] = false));
 
-        // Pointer/touch controls
         this.app.stage.eventMode = 'static';
         this.app.stage.hitArea = this.app.screen;
 
@@ -169,20 +206,14 @@ export class GameCanvas {
         this.app.stage.on('pointerupoutside', onPointerUp);
         this.app.stage.on('pointermove', onPointerMove);
         
-        // Add the main update loop to the game ticker
         this.app.ticker.add(() => this.update());
     }
 
+    // --- THIS IS THE UPDATED METHOD ---
     update() {
         let isAccelerating = false;
 
-        // Keyboard thrust
-        if (this.keys['ArrowUp']) { this.velocity.y -= this.thrust; isAccelerating = true; }
-        if (this.keys['ArrowDown']) { this.velocity.y += this.thrust; isAccelerating = true; }
-        if (this.keys['ArrowLeft']) { this.velocity.x -= this.thrust; isAccelerating = true; }
-        if (this.keys['ArrowRight']) { this.velocity.x += this.thrust; isAccelerating = true; }
-        
-        // Pointer thrust and rotation
+        // If the pointer is down, ONLY use pointer controls.
         if (this.isPointerDown) {
             const dx = this.pointerLocation.x - this.rocket.x;
             const dy = this.pointerLocation.y - this.rocket.y;
@@ -191,17 +222,23 @@ export class GameCanvas {
             this.velocity.x += Math.cos(angle) * this.thrust;
             this.velocity.y += Math.sin(angle) * this.thrust;
 
-            this.rocket.rotation = angle + Math.PI / 2;
+            this.rocket.rotation = angle + Math.PI / 2; // Instantly point towards the touch location
             isAccelerating = true;
-        } else {
-            // Keyboard rotation (banking effect)
-            let targetRotation = 0;
-            if (this.keys['ArrowLeft']) targetRotation = -this.bankAngle;
-            else if (this.keys['ArrowRight']) targetRotation = this.bankAngle;
-            this.rocket.rotation += (targetRotation - this.rocket.rotation) * 0.08;
+        } 
+        // Otherwise, use the simple keyboard controls.
+        else {
+            if (this.keys['ArrowUp']) { this.velocity.y -= this.thrust; isAccelerating = true; }
+            if (this.keys['ArrowDown']) { this.velocity.y += this.thrust; isAccelerating = true; }
+            if (this.keys['ArrowLeft']) { this.velocity.x -= this.thrust; isAccelerating = true; }
+            if (this.keys['ArrowRight']) { this.velocity.x += this.thrust; isAccelerating = true; }
+            
+            // If moving with keys, point the rocket in the direction of velocity
+            if (isAccelerating) {
+                this.rocket.rotation = Math.atan2(this.velocity.y, this.velocity.x) + Math.PI / 2;
+            }
         }
 
-        // Apply physics
+        // Apply rocket physics
         this.velocity.x *= this.drag;
         this.velocity.y *= this.drag;
         const speed = Math.sqrt(this.velocity.x ** 2 + this.velocity.y ** 2);
@@ -211,6 +248,19 @@ export class GameCanvas {
         }
         this.rocket.x += this.velocity.x;
         this.rocket.y += this.velocity.y;
+
+        // Check for collisions and update objects
+        this.checkCollisions();
+
+        // Update character positions and rotation based on their velocity
+        for (const character of this.characters) {
+            character.velocity.x *= this.characterDrag;
+            character.velocity.y *= this.characterDrag;
+            character.x += character.velocity.x;
+            character.y += character.velocity.y;
+            character.rotation += character.rotationSpeed;
+            character.rotationSpeed *= this.characterDrag;
+        }
 
         // Update camera to follow the rocket
         const targetX = -this.rocket.x + this.app.screen.width / 2;
